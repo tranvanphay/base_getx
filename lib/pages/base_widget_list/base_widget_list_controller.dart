@@ -8,43 +8,39 @@ import 'package:base_getx/repositories/remote/auth_api.dart';
 class BaseWidgetListBinding extends Bindings {
   @override
   void dependencies() {
-    Get.put<BaseWidgetListController>(
-        BaseWidgetListController(authApi: Get.find(), appProvider: Get.find()));
+    Get.put<BaseWidgetListController>(BaseWidgetListController());
   }
 }
 
 class BaseWidgetListController extends BaseController {
   GlobalKey<FormState> formKey = GlobalKey();
-  TextEditingController usernameController = TextEditingController();
-  TextEditingController passwordController = TextEditingController();
-  RxBool isAutoBaseWidgetList = false.obs;
-  final AuthApi authApi;
-  final AppProvider appProvider;
-  BaseWidgetListController({required this.authApi, required this.appProvider});
+  // TextEditingController usernameController = TextEditingController();
+  // TextEditingController passwordController = TextEditingController();
+  // RxBool isAutoBaseWidgetList = false.obs;
+  // final AuthApi authApi;
+  // final AppProvider appProvider;
+  final RxInt currentIndex = 0.obs;
+  final RxInt currentIndexMore = (-1).obs;
+
+  final RxBool showMore = false.obs;
+  BaseWidgetListController();
 
   @override
   void onInit() {
     super.onInit();
-    final _username = appProvider.getUserName();
-    final _password = appProvider.getPassword();
-    if (_username != null) {
-      usernameController.text = _username;
-      passwordController.text = _password ?? '';
+  }
+
+  void onChanged(int index) {
+    if (index == 3) {
+      showMore.value = true;
+      return;
     } else {
-      usernameController.text = "admin@example.com";
-      passwordController.text = "admin";
+      currentIndex.value = index;
+      showMore.value = false;
     }
   }
 
-  void changeAutoBaseWidgetList({required bool isChecked}) {
-    isAutoBaseWidgetList.value = isChecked;
-  }
-
-  void showRegisterScreen() {
-    // RegisterScreen.showMe();
-  }
-
-  void _showHomeScreen() {
-    // HomeScreen.showMe();
+  void onChangedMore(int index) {
+    currentIndexMore.value = index;
   }
 }
